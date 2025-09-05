@@ -21,14 +21,7 @@
 		"url": "https://github.com/Kilo-Org/kilocode"
 	},
 	"homepage": "https://kilocode.ai",
-	"categories": [
-		"AI",
-		"Chat",
-		"Programming Languages",
-		"Education",
-		"Snippets",
-		"Testing"
-	],
+	"categories": ["AI", "Chat", "Programming Languages", "Education", "Snippets", "Testing"],
 	"keywords": [
 		"cline",
 		"claude",
@@ -47,10 +40,7 @@
 		"roo code",
 		"roocode"
 	],
-	"activationEvents": [
-		"onLanguage",
-		"onStartupFinished"
-	],
+	"activationEvents": ["onLanguage", "onStartupFinished"],
 	"main": "./dist/extension.js",
 	"contributes": {
 		"walkthroughs": [
@@ -416,6 +406,16 @@
 					"when": "view == kilo-code.SidebarProvider"
 				},
 				{
+					"command": "kilo-code.mcpButtonClicked",
+					"group": "navigation@2",
+					"when": "view == kilo-code.SidebarProvider"
+				},
+				{
+					"command": "kilo-code.marketplaceButtonClicked",
+					"group": "navigation@3",
+					"when": "view == kilo-code.SidebarProvider"
+				},
+				{
 					"command": "kilo-code.historyButtonClicked",
 					"group": "navigation@4",
 					"when": "view == kilo-code.SidebarProvider"
@@ -429,6 +429,16 @@
 					"command": "kilo-code.settingsButtonClicked",
 					"group": "navigation@6",
 					"when": "view == kilo-code.SidebarProvider"
+				},
+				{
+					"command": "kilo-code.popoutButtonClicked",
+					"group": "navigation@7",
+					"when": "view == kilo-code.SidebarProvider"
+				},
+				{
+					"command": "kilo-code.helpButtonClicked",
+					"group": "navigation@8",
+					"when": "false && view == kilo-code.SidebarProvider"
 				}
 			],
 			"editor/title": [
@@ -495,14 +505,7 @@
 					"items": {
 						"type": "string"
 					},
-					"default": [
-						"npm test",
-						"npm install",
-						"tsc",
-						"git log",
-						"git diff",
-						"git show"
-					],
+					"default": ["npm test", "npm install", "tsc", "git log", "git diff", "git show"],
 					"description": "%commands.allowedCommands.description%"
 				},
 				"kilo-code.deniedCommands": {
@@ -570,12 +573,8 @@
 		},
 		"codeActions": [
 			{
-				"languages": [
-					"*"
-				],
-				"providedCodeActionKinds": [
-					"vscode.CodeActionKind.QuickFix"
-				]
+				"languages": ["*"],
+				"providedCodeActionKinds": ["vscode.CodeActionKind.QuickFix"]
 			}
 		]
 	},

@@ -1377,7 +1377,7 @@ const ChatTextArea = forwardRef<HTMLTextAreaElement, ChatTextAreaProps>(
 				)}
 
 				{/* kilocode_change: position tweaked */}
-				<div className="absolute top-2 right-2 z-30">
+				{/* <div className="absolute top-2 right-2 z-30">
 					<StandardTooltip content={t("chat:enhancePrompt")}>
 						<button
 							aria-label={t("chat:enhancePrompt")}
@@ -1397,12 +1397,12 @@ const ChatTextArea = forwardRef<HTMLTextAreaElement, ChatTextAreaProps>(
 							<WandSparkles className={cn("w-4 h-4", isEnhancingPrompt && "animate-spin")} />
 						</button>
 					</StandardTooltip>
-				</div>
+				</div> */}
 
 				{/* kilocode_change: position tweaked, rtl support */}
 				<div className="absolute bottom-2 end-2 z-30">
 					{/* kilocode_change start */}
-					<IndexingStatusBadge className={cn({ hidden: containerWidth < 235 })} />
+					{/* <IndexingStatusBadge className={cn({ hidden: containerWidth < 235 })} /> */}
 					<StandardTooltip content="Add Context (@)">
 						<button
 							aria-label="Add Context (@)"
@@ -1493,6 +1493,7 @@ const ChatTextArea = forwardRef<HTMLTextAreaElement, ChatTextAreaProps>(
 					isEditMode ? "w-full" : "w-[calc(100%-16px)]",
 					"ml-auto",
 					"mr-auto",
+					"mb-2",
 					"box-border",
 				)}>
 				<div className="relative">

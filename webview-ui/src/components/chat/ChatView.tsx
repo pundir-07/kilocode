@@ -2217,7 +2217,8 @@ const ChatViewComponent: React.ForwardRefRenderFunction<ChatViewRef, ChatViewPro
 				modeShortcutText={modeShortcutText}
 			/>
 			{/* kilocode_change: added settings toggle the profile and model selection */}
-			<BottomControls showApiConfig />
+			<div className="h-4 w-full"></div>
+			{/* <BottomControls showApiConfig /> */}
 			{/* kilocode_change: end */}
 
 			{/* kilocode_change: disable {isProfileDisabled && (
