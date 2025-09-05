@@ -1,0 +1,75 @@
+CUSTOM PROMPTS:
+
+```
+ENDPOINT: /prompts/create
+METHOD: POST
+
+BODY: JSON
+name -> prompt_name
+prompt -> Entire prompt
+
+Returns: JSON
+READ VALUE: id -> prompt_id
+
+---
+
+ENDPOINT: /prompts/get
+METHOD: POST
+
+RETURNS LIST OF ALL PROMPTS
+id, name, prompt
+
+
+---
+
+
+ENDPOINT: /prompts/edit
+METHOD: POST
+
+BODH: JSON
+name
+prompt
+id (original id of the prompt)
+
+
+---
+
+ENDPOINT: /prompts/delete
+METHOD: POST
+BODY: JSON
+-> id of  the prompt
+
+
+----------------------------------------------------------------------------------------------------
+Bro.... here are the endpoints for personality...
+
+```
+ENDPOINT: /personality/set
+METHOD: POST
+BODY -> JSON
+{"personality": CONTENT}
+
+RETURNS JSON.
+
+
+
+2. /personality/get
+GET
+
+RETURNS JSON -> READ KEY: personality
+
+3. /personality/toggle
+POST
+
+AUTOMATICALLY TOGGLES PERSONALITY
+
+
+
+
+4. /personality/status
+METHOD: GET
+RETURNS JSON -> READ KEY "status"
+
+
+personality
+Swagger Error

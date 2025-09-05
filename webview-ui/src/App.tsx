@@ -29,6 +29,48 @@ import { useAddNonInteractiveClickListener } from "./components/ui/hooks/useNonI
 import { TooltipProvider } from "./components/ui/tooltip"
 import { STANDARD_TOOLTIP_DELAY } from "./components/ui/standard-tooltip"
 import { useKiloIdentity } from "./utils/kilocode/useKiloIdentity"
+import Navbar from "./views/components/common/Navbar"
+import { Provider } from "react-redux"
+import { store } from "./views/lib/store"
+import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom"
+import ChatSidebar from "./views/components/screens/dashboard/chat"
+import CodeEvaluationsLayout from "./views/components/screens/dashboard/code-evaluations/_layout"
+import CodeEvaluationFile from "./views/components/screens/dashboard/code-evaluations/file"
+import AgentsLayout from "./views/components/screens/dashboard/agents/_layout"
+import CodeEvalutations from "./views/components/screens/dashboard/code-evaluations"
+import Agents from "./views/components/screens/dashboard/agents"
+import DebugLayout from "./views/components/screens/dashboard/agents/debug/_layout"
+import DebugDashboard from "./views/components/screens/dashboard/agents/debug"
+import DebugRun from "./views/components/screens/dashboard/agents/debug/run"
+import OptimizeLayout from "./views/components/screens/dashboard/agents/optimize/_layout"
+import OptimizeDashboard from "./views/components/screens/dashboard/agents/optimize"
+import OptimizeRun from "./views/components/screens/dashboard/agents/optimize/run"
+import ReviewLayout from "./views/components/screens/dashboard/agents/review/_layout"
+import ReviewDashboard from "./views/components/screens/dashboard/agents/review"
+import ReviewCreate from "./views/components/screens/dashboard/agents/review/create"
+import ReviewRun from "./views/components/screens/dashboard/agents/review/run"
+import SwaggerLayout from "./views/components/screens/dashboard/agents/swagger/_layout"
+import SwaggerIndex from "./views/components/screens/dashboard/agents/swagger"
+import SwaggerCreate from "./views/components/screens/dashboard/agents/swagger/create"
+import SwaggerRun from "./views/components/screens/dashboard/agents/swagger/run"
+import CustomInstructionsLayout from "./views/components/screens/dashboard/custom-instructions/_layout"
+import CustomInstructionsIndex from "./views/components/screens/dashboard/custom-instructions"
+import CustomInstructionsAdd from "./views/components/screens/dashboard/custom-instructions/add"
+import CustomInstructionsEdit from "./views/components/screens/dashboard/custom-instructions/edit"
+import AssistantPersonality from "./views/components/screens/dashboard/custom-instructions/personality"
+import KnowledgebasesLayout from "./views/components/screens/dashboard/knowledgebases/_layout"
+import HistorySidebar from "./views/components/screens/dashboard/history"
+import KnowledgeBases from "./views/components/screens/dashboard/knowledgebases"
+import KnowledgeBaseAdd from "./views/components/screens/dashboard/knowledgebases/add"
+import SettingsSidebar from "./views/components/screens/dashboard/settings"
+import CredentialsLayout from "./views/components/screens/dashboard/credentials/_layout"
+import CredentialsBYOK from "./views/components/screens/dashboard/credentials/byok"
+import CredentialsAccessTokens from "./views/components/screens/dashboard/credentials/access-tokens"
+import DependenciesSidebar from "./views/components/screens/dashboard/dependencies"
+import TestcaseRun from "./views/components/screens/dashboard/agents/testcases/run"
+import TestcasesLayout from "./views/components/screens/dashboard/agents/testcases/_layout"
+import TestcasesDashboard from "./views/components/screens/dashboard/agents/testcases"
+import HistoryPage from "./components/history/HistoryPage"
 
 type Tab = "settings" | "history" | "mcp" | "modes" | "chat" | "marketplace" | "account" | "profile" // kilocode_change: add "profile"
 
@@ -260,73 +302,77 @@ const App = () => {
 	return showWelcome ? (
 		<WelcomeView />
 	) : (
-		<>
-			{tab === "modes" && <ModesView onDone={() => switchTab("chat")} />}
-			{tab === "mcp" && <McpView onDone={() => switchTab("chat")} />}
-			{tab === "history" && <HistoryView onDone={() => switchTab("chat")} />}
-			{tab === "settings" && (
-				<SettingsView ref={settingsRef} onDone={() => switchTab("chat")} targetSection={currentSection} /> // kilocode_change
-			)}
-			{/* kilocode_change: add profileview */}
-			{tab === "profile" && <ProfileView onDone={() => switchTab("chat")} />}
-			{tab === "marketplace" && (
-				<MarketplaceView
-					stateManager={marketplaceStateManager}
-					onDone={() => switchTab("chat")}
-					// kilocode_change: targetTab="mode"
-					targetTab="mode"
-				/>
-			)}
-			{/* kilocode_change: we have our own profile view */}
-			{/* {tab === "account" && (
-				<AccountView userInfo={cloudUserInfo} isAuthenticated={false} onDone={() => switchTab("chat")} />
-			)} */}
-			<ChatView
-				ref={chatViewRef}
-				isHidden={tab !== "chat"}
-				showAnnouncement={showAnnouncement}
-				hideAnnouncement={() => setShowAnnouncement(false)}
-			/>
-			<MemoizedHumanRelayDialog
-				isOpen={humanRelayDialogState.isOpen}
-				requestId={humanRelayDialogState.requestId}
-				promptText={humanRelayDialogState.promptText}
-				onClose={() => setHumanRelayDialogState((prev) => ({ ...prev, isOpen: false }))}
-				onSubmit={(requestId, text) => vscode.postMessage({ type: "humanRelayResponse", requestId, text })}
-				onCancel={(requestId) => vscode.postMessage({ type: "humanRelayCancel", requestId })}
-			/>
-			<MemoizedDeleteMessageDialog
-				open={deleteMessageDialogState.isOpen}
-				onOpenChange={(open) => setDeleteMessageDialogState((prev) => ({ ...prev, isOpen: open }))}
-				onConfirm={() => {
-					vscode.postMessage({
-						type: "deleteMessageConfirm",
-						messageTs: deleteMessageDialogState.messageTs,
-					})
-					setDeleteMessageDialogState((prev) => ({ ...prev, isOpen: false }))
-				}}
-			/>
-			<MemoizedEditMessageDialog
-				open={editMessageDialogState.isOpen}
-				onOpenChange={(open) => setEditMessageDialogState((prev) => ({ ...prev, isOpen: open }))}
-				onConfirm={() => {
-					vscode.postMessage({
-						type: "editMessageConfirm",
-						messageTs: editMessageDialogState.messageTs,
-						text: editMessageDialogState.text,
-						images: editMessageDialogState.images,
-					})
-					setEditMessageDialogState((prev) => ({ ...prev, isOpen: false }))
-				}}
-			/>
-			{/* kilocode_change */}
-			{/* Chat, modes and history view contain their own bottom controls */}
-			{!["chat", "modes", "history"].includes(tab) && false && (
-				<div className="fixed inset-0 top-auto">
-					<BottomControls />
+		<BrowserRouter>
+			<div className="flex flex-col h-full overflow-auto">
+				{/* Row 1: Header */}
+				<div className="max-h-40">
+					<Navbar />
 				</div>
-			)}
-		</>
+
+				{/* Row 2: Content */}
+				<Routes>
+					<Route
+						path="/chat"
+						element={
+							<ChatView
+								ref={chatViewRef}
+								isHidden={tab !== "chat"}
+								showAnnouncement={showAnnouncement}
+								hideAnnouncement={() => setShowAnnouncement(false)}
+							/>
+						}
+					/>
+					<Route path="/code-evaluations/*" element={<CodeEvaluationsLayout />}>
+						<Route index element={<CodeEvalutations />} />
+						<Route path=":file" element={<CodeEvaluationFile />} />
+					</Route>
+					<Route path="/agents/*" element={<AgentsLayout />}>
+						<Route index element={<Agents />} />
+						<Route path="debug/*" element={<DebugLayout />}>
+							<Route index element={<DebugDashboard />} />
+							<Route path="run/:id" element={<DebugRun />} />
+						</Route>
+						<Route path="optimize/*" element={<OptimizeLayout />}>
+							<Route index element={<OptimizeDashboard />} />
+							<Route path="run/:id" element={<OptimizeRun />} />
+						</Route>
+						<Route path="testcases/*" element={<TestcasesLayout />}>
+							<Route index element={<TestcasesDashboard />} />
+							<Route path="run/:id" element={<TestcaseRun />} />
+						</Route>
+						<Route path="review/*" element={<ReviewLayout />}>
+							<Route index element={<ReviewDashboard />} />
+							<Route path="create" element={<ReviewCreate />} />
+							<Route path="run/:id" element={<ReviewRun />} />
+						</Route>
+						<Route path="swagger/*" element={<SwaggerLayout />}>
+							<Route index element={<SwaggerIndex />} />
+							<Route path="create" element={<SwaggerCreate />} />
+							<Route path="run/:id" element={<SwaggerRun />} />
+						</Route>
+					</Route>
+					<Route path="/custom-instructions/*" element={<CustomInstructionsLayout />}>
+						<Route index element={<CustomInstructionsIndex />} />
+						<Route path="add" element={<CustomInstructionsAdd />} />
+						<Route path="edit/:id" element={<CustomInstructionsEdit />} />
+						<Route path="personality" element={<AssistantPersonality />} />
+					</Route>
+					<Route path="/history" element={<HistoryPage onDone={() => {} }/>} />
+					<Route path="/knowledgebases/*" element={<KnowledgebasesLayout />}>
+						<Route index element={<KnowledgeBases />} />
+						<Route path="add" element={<KnowledgeBaseAdd />} />
+					</Route>
+					<Route path="/settings" element={<SettingsSidebar />} />
+					<Route path="/credentials/*" element={<CredentialsLayout />}>
+						<Route path="byok" element={<CredentialsBYOK />} />
+						<Route path="tokens" element={<CredentialsAccessTokens />} />
+						<Route path="*" element={<Navigate to="byok" replace />} />
+					</Route>
+					<Route path="/dependencies" element={<DependenciesSidebar />} />
+					<Route path="*" element={<Navigate to="/chat" replace />} />
+				</Routes>
+			</div>
+		</BrowserRouter>
 	)
 }
 
@@ -338,7 +384,9 @@ const AppWithProviders = () => (
 			<TranslationProvider>
 				<QueryClientProvider client={queryClient}>
 					<TooltipProvider delayDuration={STANDARD_TOOLTIP_DELAY}>
-						<App />
+						<Provider store={store}>
+							<App />
+						</Provider>
 					</TooltipProvider>
 				</QueryClientProvider>
 			</TranslationProvider>

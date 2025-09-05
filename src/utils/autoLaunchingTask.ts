@@ -17,9 +17,9 @@ export async function checkAndRunAutoLaunchingTask(context: vscode.ExtensionCont
 		console.log(`🚀 Auto-launching task from '${promptFilePath}' with content:\n${prompt}`)
 
 		await new Promise((resolve) => setTimeout(resolve, 500))
-		await vscode.commands.executeCommand("kilo-code.SidebarProvider.focus")
+		await vscode.commands.executeCommand("codemate.SidebarProvider.focus")
 
-		vscode.commands.executeCommand("kilo-code.newTask", { prompt })
+		vscode.commands.executeCommand("codemate.newTask", { prompt })
 	} catch (error) {
 		if (error instanceof vscode.FileSystemError && error.code === "FileNotFound") {
 			return // File not found, which is expected if no launchPrompt.md exists

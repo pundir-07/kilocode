@@ -25,25 +25,25 @@ export class GhostCodeLensProvider implements vscode.CodeLensProvider {
 			const accept = new vscode.CodeLens(this.activeSuggestionRange)
 			accept.command = {
 				title: "Accept (Tab)",
-				command: "kilo-code.ghost.applyCurrentSuggestions",
+				command: "codemate.ghost.applyCurrentSuggestions",
 				arguments: [],
 			}
 			const dismiss = new vscode.CodeLens(this.activeSuggestionRange)
 			dismiss.command = {
 				title: "Dismiss All (Esc)",
-				command: "kilo-code.ghost.cancelSuggestions",
+				command: "codemate.ghost.cancelSuggestions",
 				arguments: [],
 			}
 			const next = new vscode.CodeLens(this.activeSuggestionRange)
 			next.command = {
 				title: "Next (↓)",
-				command: "kilo-code.ghost.goToNextSuggestion",
+				command: "codemate.ghost.goToNextSuggestion",
 				arguments: [],
 			}
 			const previous = new vscode.CodeLens(this.activeSuggestionRange)
 			previous.command = {
 				title: "Previous (↑)",
-				command: "kilo-code.ghost.goToPreviousSuggestion",
+				command: "codemate.ghost.goToPreviousSuggestion",
 				arguments: [],
 			}
 			return [accept, dismiss, next, previous]

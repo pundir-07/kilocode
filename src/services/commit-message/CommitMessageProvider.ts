@@ -45,7 +45,7 @@ export class CommitMessageProvider {
 
 		// Register the command
 		const disposable = vscode.commands.registerCommand(
-			"kilo-code.generateCommitMessage",
+			"codemate.generateCommitMessage",
 			(commitContext?: GitRepository) => this.generateCommitMessage(commitContext),
 		)
 		this.context.subscriptions.push(disposable)
