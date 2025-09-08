@@ -214,6 +214,8 @@ export const selectBYOKAsModels = createSelector([selectProviderKeys], (keys): C
             return "OpenAI"
          case "claude":
             return "Claude"
+         default:
+            return "unknown"
       }
    }
 

@@ -7,7 +7,7 @@
 		"skipLibCheck": true,
 		"esModuleInterop": true,
 		"allowSyntheticDefaultImports": true,
-		"strict": false,
+		"strict": true,
 		"forceConsistentCasingInFileNames": true,
 		"noFallthroughCasesInSwitch": true,
 		"module": "esnext",
@@ -22,7 +22,9 @@
 		"paths": {
 			"@/*": ["./src/*"],
 			"@src/*": ["./src/*"],
-			"@roo/*": ["../src/shared/*"]
+			"@roo/*": ["../src/shared/*"],
+			"@views/*":["./src/views/*"],
+			"@common/*":["../webview-ui/src/common/*"]
 		}
 	},
 	"include": ["src", "../src/shared", "vitest.setup.ts"]

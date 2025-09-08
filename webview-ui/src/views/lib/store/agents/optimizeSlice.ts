@@ -1,5 +1,5 @@
-import { OptimizeRun_t, OptimizeRunState } from "@/common/types/optimize"
-import { RootState } from "@/views/lib/store"
+import { OptimizeRun_t, OptimizeRunState } from "../../../../common/types/optimize"
+import { RootState } from "../../../../views/lib/store"
 import { createSelector, createSlice, PayloadAction } from "@reduxjs/toolkit"
 
 export interface OptimizeState {

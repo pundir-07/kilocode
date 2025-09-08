@@ -8,9 +8,9 @@
 		"lib": ["es2022", "esnext.disposable", "DOM"],
 		"module": "esnext",
 		"moduleResolution": "Bundler",
-		"noFallthroughCasesInSwitch": true,
+		// "noFallthroughCasesInSwitch": true,
 		"noImplicitOverride": true,
-		"noImplicitReturns": true,
+		// "noImplicitReturns": true,
 		"noUnusedLocals": false,
 		"resolveJsonModule": true,
 		"skipLibCheck": true,
@@ -18,7 +18,13 @@
 		"strict": true,
 		"target": "es2022",
 		"useDefineForClassFields": true,
-		"useUnknownInCatchVariables": false
+		"useUnknownInCatchVariables": false,
+		"paths": {
+			"@/*": ["./*"],
+			"@webview/*": ["../webview-ui/src/*"],
+			"@views/*":["../webview-ui/src/views/*"],
+			"@common/*":["../webview-ui/src/common/*"]
+		}
 	},
 	"include": ["."],
 	"exclude": ["node_modules"],

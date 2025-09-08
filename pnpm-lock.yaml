@@ -888,6 +888,9 @@ importers:
       monaco-vscode-textmate-theme-converter:
         specifier: ^0.1.7
         version: 0.1.7(tslib@2.8.1)
+      nanoid:
+        specifier: ^5.1.5
+        version: 5.1.5
       node-cache:
         specifier: ^5.1.2
         version: 5.1.2
@@ -933,6 +936,9 @@ importers:
       reconnecting-eventsource:
         specifier: ^1.6.4
         version: 1.6.4
+      rxjs:
+        specifier: ^7.8.2
+        version: 7.8.2
       sanitize-filename:
         specifier: ^1.6.3
         version: 1.6.3
@@ -989,7 +995,7 @@ importers:
         version: 0.1.1
       web-tree-sitter:
         specifier: ^0.25.6
-        version: 0.25.6
+        version: 0.25.9
       workerpool:
         specifier: ^9.2.0
         version: 9.2.0
@@ -1009,6 +1015,9 @@ importers:
       '@roo-code/config-typescript':
         specifier: workspace:^
         version: link:../packages/config-typescript
+      '@types/adm-zip':
+        specifier: ^0.5.7
+        version: 0.5.7
       '@types/clone-deep':
         specifier: ^4.0.4
         version: 4.0.4
@@ -1021,6 +1030,9 @@ importers:
       '@types/diff-match-patch':
         specifier: ^1.0.36
         version: 1.0.36
+      '@types/follow-redirects':
+        specifier: ^1.14.4
+        version: 1.14.4
       '@types/glob':
         specifier: ^8.1.0
         version: 8.1.0
@@ -7830,6 +7842,9 @@ packages:
 
   '@types/express@4.17.23':
     resolution: {integrity: sha512-Crp6WY9aTYP3qPi2wGDo9iUe/rceX01UMhnF1jmwDcKCFM6cx7YhGP/Mpr3y9AASpfHixIG0E6azCcL5OcDHsQ==}
+
+  '@types/follow-redirects@1.14.4':
+    resolution: {integrity: sha512-GWXfsD0Jc1RWiFmMuMFCpXMzi9L7oPDVwxUnZdg89kDNnqsRfUKXEtUYtA98A6lig1WXH/CYY/fvPW9HuN5fTA==}
 
   '@types/geojson@7946.0.16':
     resolution: {integrity: sha512-6C8nqWur3j98U6+lXDfTUWIfgvZU+EumvpHKcYjujKH7woYyLj2sUmff0tRhrqM7BohUw7Pz3ZB1jj2gW9Fvmg==}
@@ -17956,8 +17971,13 @@ packages:
   web-tree-sitter@0.21.0:
     resolution: {integrity: sha512-iJ+QJ6ikN9D9cG7Kh6q3KtAstYFUQbYZ8OjuPEJYWfj2kLrmp5I3C2n6WjE1Y3jvj7nJbkcrJytJGWUEhCxn+g==}
 
-  web-tree-sitter@0.25.6:
-    resolution: {integrity: sha512-WG+/YGbxw8r+rLlzzhV+OvgiOJCWdIpOucG3qBf3RCBFMkGDb1CanUi2BxCxjnkpzU3/hLWPT8VO5EKsMk9Fxg==}
+  web-tree-sitter@0.25.9:
+    resolution: {integrity: sha512-J9L+SdqSu0SV517Ys6W/ROhT64PDE7TSDAvtjDoqlS6/1aK5b0rWNvukuuIdwGm3odA+I+r7Fyw0Vf/qdzNpnw==}
+    peerDependencies:
+      '@types/emscripten': ^1.40.0
+    peerDependenciesMeta:
+      '@types/emscripten':
+        optional: true
 
   web-vitals@4.2.4:
     resolution: {integrity: sha512-r4DIlprAGwJ7YM11VZp4R884m0Vmgr6EAKe3P+kO0PPj3Unqyvv59rczf6UiGcb9Z8QxZVcqKNwv/g0WNdWwsw==}
@@ -26009,6 +26029,10 @@ snapshots:
       '@types/express-serve-static-core': 4.19.6
       '@types/qs': 6.14.0
       '@types/serve-static': 1.15.8
+
+  '@types/follow-redirects@1.14.4':
+    dependencies:
+      '@types/node': 24.2.1
 
   '@types/geojson@7946.0.16': {}
 
@@ -38331,7 +38355,7 @@ snapshots:
 
   web-tree-sitter@0.21.0: {}
 
-  web-tree-sitter@0.25.6: {}
+  web-tree-sitter@0.25.9: {}
 
   web-vitals@4.2.4: {}
 

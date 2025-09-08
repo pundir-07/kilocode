@@ -234,7 +234,14 @@ export async function activate(context: vscode.ExtensionContext) {
 	}
 
 	registerCommands({ context, outputChannel, provider })
-
+// 	context.subscriptions.push(
+//       vscode.authentication.registerAuthenticationProvider(
+//          "codemate-auth",
+//          PRODUCT_NAME,
+//          new CodemateAuthProvider(context.globalState),
+//          { supportsMultipleAccounts: false }
+//       )
+//    )
 	/**
 	 * We use the text document content provider API to show the left side for diff
 	 * view by creating a virtual document for the original content. This makes it
