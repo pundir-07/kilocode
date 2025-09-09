@@ -20,6 +20,7 @@ import { Mode } from "./modes"
 import { ModelRecord, RouterModels } from "./api"
 import { ProfileDataResponsePayload, BalanceDataResponsePayload } from "./WebviewMessage" // kilocode_change
 import { ClineRulesToggles } from "./cline-rules" // kilocode_change
+import { CodeMateExtensionMessageType } from "./CodeMateExtensionMessageTypes"
 
 // Command interface for frontend/backend communication
 export interface Command {
@@ -63,6 +64,7 @@ export interface LanguageModelChatSelector {
 // 'settingsButtonClicked' or 'hello'. Webview will hold state.
 export interface ExtensionMessage {
 	type:
+	CodeMateExtensionMessageType
 		| "action"
 		| "state"
 		| "selectedImages"

@@ -65,6 +65,7 @@ const ALLOWED_VSCODE_SETTINGS = new Set(["terminal.integrated.inheritEnv"])
 import { MarketplaceManager, MarketplaceItemType } from "../../services/marketplace"
 import { setPendingTodoList } from "../tools/updateTodoListTool"
 import { UsageTracker } from "../../utils/usage-tracker"
+import { get_file_list } from "@/vscode/providers/panels/sidebar/events/files"
 
 export const webviewMessageHandler = async (
 	provider: ClineProvider,
@@ -220,6 +221,8 @@ export const webviewMessageHandler = async (
 	}
 
 	switch (message.type) {
+		case "get_file_list":
+			await get_file_list(provider,message.value)
 		case "webviewDidLaunch":
 			// Load custom modes first
 			const customModes = await provider.customModesManager.getCustomModes()

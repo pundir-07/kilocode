@@ -44,6 +44,13 @@ import {
 import { initializeI18n } from "./i18n"
 import { registerGhostProvider } from "./services/ghost" // kilocode_change
 import { TerminalWelcomeService } from "./services/terminal-welcome/TerminalWelcomeService" // kilocode_change
+import { CodelensProvider } from "./vscode/providers/codelens"
+import { registerShowAgentMenuCommand } from "./vscode/commands/agents/show-agent-menu"
+import { initializeProviders } from "./vscode/providers"
+import { registerAllCodeMateCommands } from "./activate/registerCodeMateCommands"
+import { SidebarProvider } from "./vscode/providers/panels/sidebar"
+import { CodemateAuthProvider } from "./vscode/providers/auth"
+import { PRODUCT_NAME } from "./common/core/constants"
 
 /**
  * Built using https://github.com/microsoft/vscode-webview-ui-toolkit
@@ -276,11 +283,22 @@ export async function activate(context: vscode.ExtensionContext) {
 			providedCodeActionKinds: CodeActionProvider.providedCodeActionKinds,
 		}),
 	)
+	
+	// registerCodeActions(context)
 
-	registerGhostProvider(context, provider) // kilocode_change
+	// registerGhostProvider(context, provider) // kilocode_change
+
 	registerCommitMessageProvider(context, outputChannel) // kilocode_change
 	registerCodeActions(context)
 	registerTerminalActions(context)
+
+	//CODEMATE providers :
+   const { suggestionCodeLensProvider } = initializeProviders(context)
+   
+   // Then register commands with the provider
+   	registerAllCodeMateCommands(context, suggestionCodeLensProvider)
+
+   // Register agent commands
 
 	// Allows other extensions to activate once Kilo Code is ready.
 	vscode.commands.executeCommand(`${Package.name}.activationCompleted`)

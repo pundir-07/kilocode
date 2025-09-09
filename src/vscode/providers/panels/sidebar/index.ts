@@ -60,7 +60,7 @@ export class SidebarProvider implements vscode.WebviewViewProvider {
          get_commit_diff: GitEvents.get_commit_diff,
 
          // File Events
-         get_file_list: FileEvents.get_file_list,
+         // get_file_list: FileEvents.get_file_list,
          get_workspace_path: FileEvents.get_workspace_path,
          open_file: FileEvents.open_file,
          preview_image_file:FileEvents.preview_image_file,

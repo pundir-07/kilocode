@@ -11,6 +11,7 @@ import {
 import type { ShareVisibility } from "@roo-code/cloud"
 
 import { Mode } from "./modes"
+import { CodeMateWebViewMessageTypes } from "./CodemateWebviewMessageTypes"
 
 export type ClineAskResponse =
 	| "yesButtonClicked"
@@ -29,6 +30,7 @@ export interface UpdateTodoListPayload {
 
 export interface WebviewMessage {
 	type:
+	CodeMateWebViewMessageTypes
 		| "updateTodoList"
 		| "deleteMultipleTasksWithIds"
 		| "currentApiConfigName"
@@ -272,7 +274,7 @@ export interface WebviewMessage {
 	apiConfiguration?: ProviderSettings
 	images?: string[]
 	bool?: boolean
-	value?: number
+	value?: any
 	commands?: string[]
 	audioType?: AudioType
 	// kilocode_change begin

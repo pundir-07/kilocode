@@ -6,6 +6,7 @@ import * as fs from "fs"
 import * as https from "https"
 import * as http from "http"
 import { randomUUID } from "crypto";
+import { ClineProvider } from "@/core/webview/ClineProvider";
 // Define ignored patterns
 const IGNORED_FOLDERS = new Set([
    // Build & Compilation Outputs
@@ -288,13 +289,14 @@ const createIgnorePattern = () => {
    return `{${folderPattern},${extensionPattern}}`
 }
 
-export async function get_file_list(webviewView: vscode.WebviewView, data: any) {
+export async function get_file_list(provider: ClineProvider, data: any) {
+  console.log("GET FILE LIST MESSAGE RECIEVED")
    const workspace = vscode.workspace.workspaceFolders?.length
       ? vscode.workspace.workspaceFolders[0]
       : undefined
 
    if (!workspace) {
-      webviewView.webview.postMessage({
+      provider.postMessageToWebview({
          type: "fileList",
          value: [],
       })
@@ -325,13 +327,13 @@ export async function get_file_list(webviewView: vscode.WebviewView, data: any) 
          }
       })
 
-      webviewView.webview.postMessage({
+      provider.postMessageToWebview({
          type: "fileList",
          value: fileList,
       })
    } catch (error) {
       console.error("Error finding files:", error)
-      webviewView.webview.postMessage({
+      provider.postMessageToWebview({
          type: "fileList",
          value: [],
       })

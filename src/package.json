@@ -123,9 +123,152 @@
 					"id": "codemate.SidebarProvider",
 					"name": "%views.sidebar.name%"
 				}
-			]
+         ]
 		},
 		"commands": [
+			{
+				"command": "codemate.clear_cache",
+				"title": "CodeMate: Clear cache and reload"
+			},
+			{
+				"command": "codemate.restartServer",
+				"title": "CodeMate: Restart server"
+			},
+			{
+				"command": "codemate.login",
+				"title": "CodeMate: Login"
+			},
+			{
+				"command": "codemate.logout",
+				"title": "CodeMate: Logout"
+			},
+			{
+				"command": "codemate.codelensAction",
+				"title": "CodeMate: Perform AI Action on Code",
+				"category": "CodeMate",
+				"icon": "$(lightbulb)"
+			},
+			{
+				"command": "codemate.enableCodeLens",
+				"title": "CodeMate: Enable CodeLens"
+			},
+			{
+				"command": "codemate.disableCodeLens",
+				"title": "CodeMate: Disable CodeLens"
+			},
+			{
+				"command": "codemate.acceptSuggestion",
+				"title": "CodeMate: Accept Suggestion"
+			},
+			{
+				"command": "codemate.rejectSuggestion",
+				"title": "CodeMate: Reject Suggestion"
+			},
+			{
+				"command": "codemate.acceptNearestSuggestion",
+				"title": "CodeMate: Accept Nearest Suggestion"
+			},
+			{
+				"command": "codemate.rejectNearestSuggestion",
+				"title": "CodeMate: Reject Nearest Suggestion"
+			},
+			{
+				"command": "codemate.acceptAllSuggestions",
+				"title": "CodeMate: Accept All Suggestions"
+			},
+			{
+				"command": "codemate.rejectAllSuggestions",
+				"title": "CodeMate: Reject All Suggestions"
+			},
+			{
+				"command": "codemate.showSuggestionDiff",
+				"title": "CodeMate: Show Suggestion Diff"
+			},
+			{
+				"command": "codemate.directEdit",
+				"title": "CodeMate: Edit Code",
+				"category": "CodeMate"
+			},
+			{
+				"command": "codemate.directOptimize",
+				"title": "CodeMate: Optimize Code",
+				"category": "CodeMate"
+			},
+			{
+				"command": "codemate.directDebug",
+				"title": "CodeMate: Debug Code",
+				"category": "CodeMate"
+			},
+			{
+				"command": "codemate.directTest",
+				"title": "CodeMate: Generate Tests",
+				"category": "CodeMate"
+			},
+			{
+				"command": "codemate.directReview",
+				"title": "CodeMate: Review Code",
+				"category": "CodeMate"
+			},
+			{
+				"command": "codemate.openSecurityEvaluation",
+				"title": "Open Security Evaluation",
+				"category": "CodeMate"
+			},
+			{
+				"command": "codemate.animateSelection",
+				"title": "CodeMate: Animate Selection",
+				"category": "CodeMate"
+			},
+			{
+				"command": "codemate.clearAnimations",
+				"title": "CodeMate: Clear All Animations",
+				"category": "CodeMate"
+			},
+			{
+				"command": "codemate.enableInlineSuggestions",
+				"title": "CodeMate: Enable Inline Suggestions"
+			},
+			{
+				"command": "codemate.disableInlineSuggestions",
+				"title": "CodeMate: Disable Inline Suggestions"
+			},
+			{
+				"command": "codemate.exportChatHistory",
+				"title": "CodeMate: Export Chat History",
+				"category": "CodeMate"
+			},
+			{
+				"command": "codemate.newChat",
+				"title": "CodeMate: New Chat",
+				"category": "CodeMate"
+			},
+			{
+				"command": "codemate.newChatWithMessage",
+				"title": "CodeMate: New Chat with Message",
+				"category": "CodeMate"
+			},
+			{
+				"command": "codemate.openSettings",
+				"title": "CodeMate: Open Settings"
+			},
+			{
+				"command": "codemate.openKnowledgebases",
+				"title": "CodeMate: Open Knowledgebases"
+			},
+			{
+				"command": "codemate.openHistory",
+				"title": "CodeMate: Open Chat History"
+			},
+			{
+				"command": "codemate.openAgents",
+				"title": "CodeMate: Open Agents"
+			},
+			{
+				"command": "codemate.openChatSelector",
+				"title": "CodeMate: Open Chat Selector",
+				"category": "CodeMate"
+			},
+			
 			{
 				"command": "codemate.plusButtonClicked",
 				"title": "%command.newTask.title%",
