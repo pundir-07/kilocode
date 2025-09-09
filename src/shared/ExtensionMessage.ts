@@ -498,6 +498,12 @@ export interface ClineApiReqInfo {
 	cancelReason?: ClineApiReqCancelReason
 	streamingFailedMessage?: string
 	apiProtocol?: "anthropic" | "openai"
+	retryStatus?: { //Codemate addition
+    attempt: number;
+    maxAttempts: number;
+    delaySec: number;
+    errorSnippet?: string;
+  };
 }
 
 export type ClineApiReqCancelReason = "streaming_failed" | "user_cancelled"

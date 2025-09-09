@@ -1,6 +1,7 @@
 import styled from "styled-components"
 import { vscode } from "@/utils/vscode"
 import { useCallback, useState } from "react"
+import { Mode } from "@roo/modes"
 
 const SwitchOption = styled.div.withConfig({
   shouldForwardProp: (prop) => !["isActive"].includes(prop),
@@ -75,12 +76,11 @@ const Slider = styled.div.withConfig({
   z-index: 1;
 `
 
-export default function CodemateModeSelector() {
-  const [mode, setMode] = useState<"architect" | "agent">("architect")
+export default function CodemateModeSelector({mode}:{mode:Mode}) {
+  // const [mode, setMode] = useState<"architect" | "agent">("architect")
 
   const onModeToggle = useCallback(
     (selectedValue: "architect" | "agent") => {
-      setMode(selectedValue)
       vscode.postMessage({ type: "mode", text: selectedValue })
     },
     []

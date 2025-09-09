@@ -55,6 +55,8 @@ import { cn } from "@/lib/utils"
 import { KiloChatRowUserFeedback } from "../kilocode/chat/KiloChatRowUserFeedback" // kilocode_change
 import { StandardTooltip } from "../ui" // kilocode_change
 import { FastApplyChatDisplay } from "./kilocode/FastApplyChatDisplay" // kilocode_change
+import { ErrorBlockTitle } from "./ErrorBlockTitle"
+import { getMcpServerDisplayName } from "@/utils/kilocode/mcp"
 
 interface ChatRowProps {
 	message: ClineMessage
@@ -133,7 +135,7 @@ export const ChatRowContent = ({
 	editable,
 }: ChatRowContentProps) => {
 	const { t } = useTranslation()
-	const { mcpServers, alwaysAllowMcp, currentCheckpoint } = useExtensionState()
+	const { mcpServers, alwaysAllowMcp, currentCheckpoint,mcpMarketplaceCatalog } = useExtensionState()
 	const [reasoningCollapsed, setReasoningCollapsed] = useState(true)
 	const [isDiffErrorExpanded, setIsDiffErrorExpanded] = useState(false)
 	const [showCopySuccess, setShowCopySuccess] = useState(false)
@@ -199,10 +201,10 @@ export const ChatRowContent = ({
 	*/
 
 	// kilocode_change: usageMissing
-	const [cost, usageMissing, apiReqCancelReason, apiReqStreamingFailedMessage] = useMemo(() => {
+	const [cost, usageMissing, apiReqCancelReason, apiReqStreamingFailedMessage,retryStatus] = useMemo(() => {
 		if (message.text !== null && message.text !== undefined && message.say === "api_req_started") {
 			const info = safeJsonParse<ClineApiReqInfo>(message.text)
-			return [info?.cost, info?.usageMissing, info?.cancelReason, info?.streamingFailedMessage]
+			return [info?.cost, info?.usageMissing, info?.cancelReason, info?.streamingFailedMessage,info?.retryStatus,info?.retryStatus]
 		}
 
 		return [undefined, undefined, undefined]
@@ -228,121 +230,235 @@ export const ChatRowContent = ({
 	const successColor = "var(--vscode-charts-green)"
 	const cancelledColor = "var(--vscode-descriptionForeground)"
 
+	// const [icon, title] = useMemo(() => {
+	// 	switch (type) {
+	// 		case "error":
+	// 			return [
+	// 				<span
+	// 					className="codicon codicon-error"
+	// 					style={{ color: errorColor, marginBottom: "-1.5px" }}></span>,
+	// 				<span style={{ color: errorColor, fontWeight: "bold" }}>{t("chat:error")}</span>,
+	// 			]
+	// 		case "mistake_limit_reached":
+	// 			return [
+	// 				<span
+	// 					className="codicon codicon-error"
+	// 					style={{ color: errorColor, marginBottom: "-1.5px" }}></span>,
+	// 				<span style={{ color: errorColor, fontWeight: "bold" }}>{t("chat:troubleMessage")}</span>,
+	// 			]
+	// 		case "command":
+	// 			return [
+	// 				isCommandExecuting ? (
+	// 					<ProgressIndicator />
+	// 				) : (
+	// 					<span
+	// 						className="codicon codicon-terminal"
+	// 						style={{ color: normalColor, marginBottom: "-1.5px" }}></span>
+	// 				),
+	// 				<span style={{ color: normalColor, fontWeight: "bold" }}>{t("chat:runCommand.title")}:</span>,
+	// 			]
+	// 		case "use_mcp_server":
+	// 			const mcpServerUse = safeJsonParse<ClineAskUseMcpServer>(message.text)
+	// 			if (mcpServerUse === undefined) {
+	// 				return [null, null]
+	// 			}
+	// 			return [
+	// 				isMcpServerResponding ? (
+	// 					<ProgressIndicator />
+	// 				) : (
+	// 					<span
+	// 						className="codicon codicon-server"
+	// 						style={{ color: normalColor, marginBottom: "-1.5px" }}></span>
+	// 				),
+	// 				<span style={{ color: normalColor, fontWeight: "bold" }}>
+	// 					{mcpServerUse.type === "use_mcp_tool"
+	// 						? t("chat:mcp.wantsToUseTool", { serverName: mcpServerUse.serverName })
+	// 						: t("chat:mcp.wantsToAccessResource", { serverName: mcpServerUse.serverName })}
+	// 				</span>,
+	// 			]
+	// 		case "completion_result":
+	// 			return [
+	// 				<span
+	// 					className="codicon codicon-check"
+	// 					style={{ color: successColor, marginBottom: "-1.5px" }}></span>,
+	// 				<span style={{ color: successColor, fontWeight: "bold" }}>{t("chat:taskCompleted")}</span>,
+	// 			]
+	// 		case "api_req_retry_delayed":
+	// 			return []
+	// 		case "api_req_started":
+	// 			const getIconSpan = (iconName: string, color: string) => (
+	// 				<div
+	// 					style={{
+	// 						width: 16,
+	// 						height: 16,
+	// 						display: "flex",
+	// 						alignItems: "center",
+	// 						justifyContent: "center",
+	// 					}}>
+	// 					<span
+	// 						className={`codicon codicon-${iconName}`}
+	// 						style={{ color, fontSize: 16, marginBottom: "-1.5px" }}
+	// 					/>
+	// 				</div>
+	// 			)
+	// 			return [
+	// 				apiReqCancelReason !== null && apiReqCancelReason !== undefined ? (
+	// 					apiReqCancelReason === "user_cancelled" ? (
+	// 						getIconSpan("error", cancelledColor)
+	// 					) : (
+	// 						getIconSpan("error", errorColor)
+	// 					)
+	// 				) : cost !== null && cost !== undefined ? (
+	// 					getIconSpan("check", successColor)
+	// 				) : apiRequestFailedMessage ? (
+	// 					getIconSpan("error", errorColor)
+	// 				) : (
+	// 					<ProgressIndicator />
+	// 				),
+	// 				apiReqCancelReason !== null && apiReqCancelReason !== undefined ? (
+	// 					apiReqCancelReason === "user_cancelled" ? (
+	// 						<span style={{ color: normalColor, fontWeight: "bold" }}>
+	// 							{t("chat:apiRequest.cancelled")}
+	// 						</span>
+	// 					) : (
+	// 						<span style={{ color: errorColor, fontWeight: "bold" }}>
+	// 							{t("chat:apiRequest.streamingFailed")}
+	// 						</span>
+	// 					)
+	// 				) : cost !== null && cost !== undefined ? (
+	// 					<span style={{ color: normalColor, fontWeight: "bold" }}>{t("chat:apiRequest.title")}</span>
+	// 				) : apiRequestFailedMessage ? (
+	// 					<span style={{ color: errorColor, fontWeight: "bold" }}>{t("chat:apiRequest.failed")}</span>
+	// 				) : (
+	// 					<span style={{ color: normalColor, fontWeight: "bold" }}>{t("chat:apiRequest.streaming")}</span>
+	// 				),
+	// 			]
+	// 		case "followup":
+	// 			return [
+	// 				<span
+	// 					className="codicon codicon-question"
+	// 					style={{ color: normalColor, marginBottom: "-1.5px" }}
+	// 				/>,
+	// 				<span style={{ color: normalColor, fontWeight: "bold" }}>{t("chat:questions.hasQuestion")}</span>,
+	// 			]
+	// 		default:
+	// 			return [null, null]
+	// 	}
+	// }, [type, isCommandExecuting, message, isMcpServerResponding, apiReqCancelReason, cost, apiRequestFailedMessage, t])
 	const [icon, title] = useMemo(() => {
-		switch (type) {
-			case "error":
-				return [
-					<span
-						className="codicon codicon-error"
-						style={{ color: errorColor, marginBottom: "-1.5px" }}></span>,
-					<span style={{ color: errorColor, fontWeight: "bold" }}>{t("chat:error")}</span>,
-				]
-			case "mistake_limit_reached":
-				return [
-					<span
-						className="codicon codicon-error"
-						style={{ color: errorColor, marginBottom: "-1.5px" }}></span>,
-					<span style={{ color: errorColor, fontWeight: "bold" }}>{t("chat:troubleMessage")}</span>,
-				]
-			case "command":
-				return [
-					isCommandExecuting ? (
-						<ProgressIndicator />
-					) : (
-						<span
-							className="codicon codicon-terminal"
-							style={{ color: normalColor, marginBottom: "-1.5px" }}></span>
-					),
-					<span style={{ color: normalColor, fontWeight: "bold" }}>{t("chat:runCommand.title")}:</span>,
-				]
-			case "use_mcp_server":
-				const mcpServerUse = safeJsonParse<ClineAskUseMcpServer>(message.text)
-				if (mcpServerUse === undefined) {
-					return [null, null]
-				}
-				return [
-					isMcpServerResponding ? (
-						<ProgressIndicator />
-					) : (
-						<span
-							className="codicon codicon-server"
-							style={{ color: normalColor, marginBottom: "-1.5px" }}></span>
-					),
-					<span style={{ color: normalColor, fontWeight: "bold" }}>
-						{mcpServerUse.type === "use_mcp_tool"
-							? t("chat:mcp.wantsToUseTool", { serverName: mcpServerUse.serverName })
-							: t("chat:mcp.wantsToAccessResource", { serverName: mcpServerUse.serverName })}
-					</span>,
-				]
-			case "completion_result":
-				return [
-					<span
-						className="codicon codicon-check"
-						style={{ color: successColor, marginBottom: "-1.5px" }}></span>,
-					<span style={{ color: successColor, fontWeight: "bold" }}>{t("chat:taskCompleted")}</span>,
-				]
-			case "api_req_retry_delayed":
-				return []
-			case "api_req_started":
-				const getIconSpan = (iconName: string, color: string) => (
-					<div
-						style={{
-							width: 16,
-							height: 16,
-							display: "flex",
-							alignItems: "center",
-							justifyContent: "center",
-						}}>
-						<span
-							className={`codicon codicon-${iconName}`}
-							style={{ color, fontSize: 16, marginBottom: "-1.5px" }}
-						/>
-					</div>
-				)
-				return [
-					apiReqCancelReason !== null && apiReqCancelReason !== undefined ? (
-						apiReqCancelReason === "user_cancelled" ? (
-							getIconSpan("error", cancelledColor)
-						) : (
-							getIconSpan("error", errorColor)
-						)
-					) : cost !== null && cost !== undefined ? (
-						getIconSpan("check", successColor)
-					) : apiRequestFailedMessage ? (
-						getIconSpan("error", errorColor)
-					) : (
-						<ProgressIndicator />
-					),
-					apiReqCancelReason !== null && apiReqCancelReason !== undefined ? (
-						apiReqCancelReason === "user_cancelled" ? (
-							<span style={{ color: normalColor, fontWeight: "bold" }}>
-								{t("chat:apiRequest.cancelled")}
-							</span>
-						) : (
-							<span style={{ color: errorColor, fontWeight: "bold" }}>
-								{t("chat:apiRequest.streamingFailed")}
-							</span>
-						)
-					) : cost !== null && cost !== undefined ? (
-						<span style={{ color: normalColor, fontWeight: "bold" }}>{t("chat:apiRequest.title")}</span>
-					) : apiRequestFailedMessage ? (
-						<span style={{ color: errorColor, fontWeight: "bold" }}>{t("chat:apiRequest.failed")}</span>
-					) : (
-						<span style={{ color: normalColor, fontWeight: "bold" }}>{t("chat:apiRequest.streaming")}</span>
-					),
-				]
-			case "followup":
-				return [
-					<span
-						className="codicon codicon-question"
-						style={{ color: normalColor, marginBottom: "-1.5px" }}
-					/>,
-					<span style={{ color: normalColor, fontWeight: "bold" }}>{t("chat:questions.hasQuestion")}</span>,
-				]
-			default:
-				return [null, null]
-		}
-	}, [type, isCommandExecuting, message, isMcpServerResponding, apiReqCancelReason, cost, apiRequestFailedMessage, t])
+      switch (type) {
+        case "error":
+          return [
+            <span
+              className="codicon codicon-error"
+              style={{
+                color: errorColor,
+                marginBottom: "-1.5px",
+              }}
+            ></span>,
+            <span style={{ color: errorColor, fontWeight: "bold" }}>
+              Error
+            </span>,
+          ];
+        case "mistake_limit_reached":
+          return [
+            <span
+              className="codicon codicon-error"
+              style={{
+                color: errorColor,
+                marginBottom: "-1.5px",
+              }}
+            ></span>,
+            <span style={{ color: errorColor, fontWeight: "bold" }}>
+              Codemate is having trouble...
+            </span>,
+          ];
+        case "auto_approval_max_req_reached":
+          return [
+            <span
+              className="codicon codicon-warning"
+              style={{
+                color: errorColor,
+                marginBottom: "-1.5px",
+              }}
+            ></span>,
+            <span style={{ color: errorColor, fontWeight: "bold" }}>
+              Maximum Requests Reached
+            </span>,
+          ];
+        case "command":
+          return [
+            isCommandExecuting ? <ProgressIndicator /> : null,
+            <span style={{ color: normalColor, fontWeight: "bold" }}>
+              Execute command
+            </span>,
+            // <span style={{ color: normalColor, fontWeight: "bold" }}>Codemate wants to execute this command:</span>,
+          ];
+        case "use_mcp_server":
+          const mcpServerUse = JSON.parse(
+            message.text || "{}"
+          ) as ClineAskUseMcpServer;
+          return [
+            isMcpServerResponding ? <ProgressIndicator /> : null,
+            <span
+              className="ph-no-capture"
+              style={{
+                color: normalColor,
+                fontWeight: "bold",
+                wordBreak: "break-word",
+              }}
+            >
+              {/* Codemate wants to {mcpServerUse.type === "use_mcp_tool" ? "use a tool" : "access a resource"} on the{" "}
+							<code style={{ wordBreak: "break-all" }}>
+								{getMcpServerDisplayName(mcpServerUse.serverName, mcpMarketplaceCatalog)}
+							</code>{" "}
+							MCP server: */}
+              {mcpServerUse.type === "use_mcp_tool"
+                ? "Use MCP tool"
+                : "Access MCP resource"}{" "}
+              on{" "}
+              <code style={{ wordBreak: "break-all" }}>
+                {getMcpServerDisplayName(
+                  mcpServerUse.serverName,
+                  mcpMarketplaceCatalog
+                )}
+              </code>
+            </span>,
+          ];
+        case "completion_result":
+          return [null, null]; // No header for completion result
+        case "api_req_started":
+          return ErrorBlockTitle({
+            cost,
+            apiReqCancelReason,
+            apiRequestFailedMessage,
+            retryStatus,
+          });
+        case "followup":
+          return [
+            <span
+              className="codicon codicon-question"
+              style={{
+                color: normalColor,
+                marginBottom: "-1.5px",
+              }}
+            ></span>,
+            <span style={{ color: normalColor, fontWeight: "bold" }}>
+              Question:
+            </span>,
+          ];
+        default:
+          return [null, null];
+      }
+    }, [
+      type,
+      cost,
+      apiRequestFailedMessage,
+      isCommandExecuting,
+      apiReqCancelReason,
+      isMcpServerResponding,
+      message.text,
+    ]);
 
 	const headerStyle: React.CSSProperties = {
 		display: "flex",
@@ -974,42 +1090,42 @@ export const ChatRowContent = ({
 						</div>
 					)
 				case "subtask_result":
-					return (
-						<div>
-							<div
-								style={{
-									marginTop: "0px",
-									backgroundColor: "var(--vscode-badge-background)",
-									border: "1px solid var(--vscode-badge-background)",
-									borderRadius: "0 0 4px 4px",
-									overflow: "hidden",
-									marginBottom: "8px",
-								}}>
-								<div
-									style={{
-										padding: "9px 10px 9px 14px",
-										backgroundColor: "var(--vscode-badge-background)",
-										borderBottom: "1px solid var(--vscode-editorGroup-border)",
-										fontWeight: "bold",
-										fontSize: "var(--vscode-font-size)",
-										color: "var(--vscode-badge-foreground)",
-										display: "flex",
-										alignItems: "center",
-										gap: "6px",
-									}}>
-									<span className="codicon codicon-arrow-left"></span>
-									{t("chat:subtasks.resultContent")}
-								</div>
-								<div
-									style={{
-										padding: "12px 16px",
-										backgroundColor: "var(--vscode-editor-background)",
-									}}>
-									<MarkdownBlock markdown={message.text} />
-								</div>
-							</div>
-						</div>
-					)
+					// return (
+					// 	<div>
+					// 		<div
+					// 			style={{
+					// 				marginTop: "0px",
+					// 				backgroundColor: "var(--vscode-badge-background)",
+					// 				border: "1px solid var(--vscode-badge-background)",
+					// 				borderRadius: "0 0 4px 4px",
+					// 				overflow: "hidden",
+					// 				marginBottom: "8px",
+					// 			}}>
+					// 			<div
+					// 				style={{
+					// 					padding: "9px 10px 9px 14px",
+					// 					backgroundColor: "var(--vscode-badge-background)",
+					// 					borderBottom: "1px solid var(--vscode-editorGroup-border)",
+					// 					fontWeight: "bold",
+					// 					fontSize: "var(--vscode-font-size)",
+					// 					color: "var(--vscode-badge-foreground)",
+					// 					display: "flex",
+					// 					alignItems: "center",
+					// 					gap: "6px",
+					// 				}}>
+					// 				<span className="codicon codicon-arrow-left"></span>
+					// 				{t("chat:subtasks.resultContent")}
+					// 			</div>
+					// 			<div
+					// 				style={{
+					// 					padding: "12px 16px",
+					// 					backgroundColor: "var(--vscode-editor-background)",
+					// 				}}>
+					// 				<MarkdownBlock markdown={message.text} />
+					// 			</div>
+					// 		</div>
+					// 	</div>
+					// )
 				case "reasoning":
 					return (
 						<ReasoningBlock
@@ -1144,29 +1260,29 @@ export const ChatRowContent = ({
 								{icon}
 								{title}
 							</div>
-							<div style={{ color: "var(--vscode-charts-green)", paddingTop: 10 }}>
+							<div style={{ color: "#ffffff", paddingTop: 10 }}>
 								<Markdown markdown={message.text} />
 							</div>
 						</>
 					)
 				case "shell_integration_warning":
 					return <CommandExecutionError />
-				case "checkpoint_saved":
-					return (
-						<CheckpointSaved
-							ts={message.ts!}
-							commitHash={message.text!}
-							currentHash={currentCheckpoint}
-							checkpoint={message.checkpoint}
-						/>
-					)
-				case "condense_context":
-					if (message.partial) {
-						return <CondensingContextRow />
-					}
-					return message.contextCondense ? <ContextCondenseRow {...message.contextCondense} /> : null
-				case "condense_context_error":
-					return <CondenseContextErrorRow errorText={message.text} />
+				// case "checkpoint_saved":
+				// 	return (
+				// 		<CheckpointSaved
+				// 			ts={message.ts!}
+				// 			commitHash={message.text!}
+				// 			currentHash={currentCheckpoint}
+				// 			checkpoint={message.checkpoint}
+				// 		/>
+				// 	)
+				// case "condense_context":
+				// 	if (message.partial) {
+				// 		return <CondensingContextRow />
+				// 	}
+				// 	return message.contextCondense ? <ContextCondenseRow {...message.contextCondense} /> : null
+				// case "condense_context_error":
+				// 	return <CondenseContextErrorRow errorText={message.text} />
 				case "codebase_search_result":
 					let parsed: {
 						content: {
@@ -1335,7 +1451,7 @@ export const ChatRowContent = ({
 									{icon}
 									{title}
 								</div>
-								<div style={{ color: "var(--vscode-charts-green)", paddingTop: 10 }}>
+								<div style={{ color: "#ffffff", paddingTop: 10 }}>
 									<Markdown markdown={message.text} partial={message.partial} />
 								</div>
 							</div>
@@ -1368,44 +1484,44 @@ export const ChatRowContent = ({
 					)
 
 				// kilocode_change begin
-				case "condense":
-					return (
-						<>
-							<div style={headerStyle}>
-								<span
-									className="codicon codicon-new-file"
-									style={{
-										color: normalColor,
-										marginBottom: "-1.5px",
-									}}></span>
-								<span style={{ color: normalColor, fontWeight: "bold" }}>
-									{t("kilocode:chat.condense.wantsToCondense")}
-								</span>
-							</div>
-							<NewTaskPreview context={message.text || ""} />
-						</>
-					)
+				// case "condense":
+				// 	return (
+				// 		<>
+				// 			<div style={headerStyle}>
+				// 				<span
+				// 					className="codicon codicon-new-file"
+				// 					style={{
+				// 						color: normalColor,
+				// 						marginBottom: "-1.5px",
+				// 					}}></span>
+				// 				<span style={{ color: normalColor, fontWeight: "bold" }}>
+				// 					{t("kilocode:chat.condense.wantsToCondense")}
+				// 				</span>
+				// 			</div>
+				// 			<NewTaskPreview context={message.text || ""} />
+				// 		</>
+				// 	)
 
-				case "payment_required_prompt": {
-					return <LowCreditWarning message={message} />
-				}
-				case "report_bug":
-					return (
-						<>
-							<div style={headerStyle}>
-								<span
-									className="codicon codicon-new-file"
-									style={{
-										color: normalColor,
-										marginBottom: "-1.5px",
-									}}></span>
-								<span style={{ color: normalColor, fontWeight: "bold" }}>
-									KiloCode wants to create a Github issue:
-								</span>
-							</div>
-							<ReportBugPreview data={message.text || ""} />
-						</>
-					)
+				// case "payment_required_prompt": {
+				// 	return <LowCreditWarning message={message} />
+				// }
+				// case "report_bug":
+				// 	return (
+				// 		<>
+				// 			<div style={headerStyle}>
+				// 				<span
+				// 					className="codicon codicon-new-file"
+				// 					style={{
+				// 						color: normalColor,
+				// 						marginBottom: "-1.5px",
+				// 					}}></span>
+				// 				<span style={{ color: normalColor, fontWeight: "bold" }}>
+				// 					KiloCode wants to create a Github issue:
+				// 				</span>
+				// 			</div>
+				// 			<ReportBugPreview data={message.text || ""} />
+				// 		</>
+				// 	)
 				// kilocode_change end
 				case "auto_approval_max_req_reached": {
 					return <AutoApprovedRequestLimitWarning message={message} />

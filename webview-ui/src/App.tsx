@@ -357,7 +357,7 @@ const App = () => {
 						<Route path="edit/:id" element={<CustomInstructionsEdit />} />
 						<Route path="personality" element={<AssistantPersonality />} />
 					</Route>
-					<Route path="/history" element={<HistoryPage onDone={() => {} }/>} />
+					<Route path="/history" element={<HistorySidebar />} />
 					<Route path="/knowledgebases/*" element={<KnowledgebasesLayout />}>
 						<Route index element={<KnowledgeBases />} />
 						<Route path="add" element={<KnowledgeBaseAdd />} />

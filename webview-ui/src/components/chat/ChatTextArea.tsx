@@ -50,6 +50,7 @@ import {
 	insertSlashCommand,
 	validateSlashCommand,
 } from "@/utils/slash-commands"
+import CodemateModeSelector from "../kilocode/CodeMateModeSwitch"
 // kilocode_change end
 
 interface ChatTextAreaProps {
@@ -1182,12 +1183,13 @@ const ChatTextArea = forwardRef<HTMLTextAreaElement, ChatTextAreaProps>(
 				<div className={cn("flex", "items-center", "gap-1", "min-w-0")}>
 					<div className="shrink-0">
 						{/* kilocode_change start: KiloModeSelector instead of ModeSelector */}
-						<KiloModeSelector
+						{/* <KiloModeSelector
 							value={mode}
 							onChange={setMode}
 							modeShortcutText={modeShortcutText}
 							customModes={customModes}
-						/>
+						/> */}
+						<CodemateModeSelector mode={mode}/>
 						{/* kilocode_change end */}
 					</div>
 
@@ -1321,7 +1323,7 @@ const ChatTextArea = forwardRef<HTMLTextAreaElement, ChatTextAreaProps>(
 						onHeightChange?.(height)
 					}}
 					// kilocode_change: combine placeholderText and placeholderBottomText here
-					placeholder={`${placeholderText}\n${placeholderBottomText}`}
+					placeholder={`${placeholderText}`}
 					minRows={3}
 					maxRows={15}
 					autoFocus={true}

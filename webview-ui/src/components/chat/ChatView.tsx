@@ -1926,13 +1926,14 @@ const ChatViewComponent: React.ForwardRefRenderFunction<ChatViewRef, ChatViewPro
 		vscode.postMessage({ type: "condenseTaskContextRequest", text: taskId })
 	}
 
-	const areButtonsVisible = showScrollToBottom || primaryButtonText || secondaryButtonText || isStreaming
+	// const areButtonsVisible = showScrollToBottom || primaryButtonText || secondaryButtonText || isStreaming
+	const areButtonsVisible = false
 
 	return (
 		<div
 			data-testid="chat-view"
 			className={isHidden ? "hidden" : "h-full flex flex-col overflow-hidden "}>
-			{(showAnnouncement || showAnnouncementModal) && (
+			{/* {(showAnnouncement || showAnnouncementModal) && (
 				<Announcement
 					hideAnnouncement={() => {
 						if (showAnnouncementModal) {
@@ -1943,7 +1944,7 @@ const ChatViewComponent: React.ForwardRefRenderFunction<ChatViewRef, ChatViewPro
 						}
 					}}
 				/>
-			)}
+			)} */}
 			{task ? (
 				<>
 					{/* kilocode_change start */}
@@ -1977,7 +1978,7 @@ const ChatViewComponent: React.ForwardRefRenderFunction<ChatViewRef, ChatViewPro
 					/>
 					{/* kilocode_change start */}
 
-					{hasSystemPromptOverride && (
+					{/* {hasSystemPromptOverride && (
 						<div className="px-3">
 							<SystemPromptWarning />
 						</div>
@@ -1987,12 +1988,12 @@ const ChatViewComponent: React.ForwardRefRenderFunction<ChatViewRef, ChatViewPro
 						<div className="px-3">
 							<CheckpointWarning />
 						</div>
-					)}
+					)} */}
 				</>
 			) : (
 				<div className="flex-1 min-h-0 overflow-y-auto flex flex-col gap-4 relative">
 					{/* Moved Task Bar Header Here */}
-					{tasks.length !== 0 && (
+					{/* {tasks.length !== 0 && (
 						<div className="flex text-vscode-descriptionForeground w-full mx-auto px-5 pt-3">
 							<div className="flex items-center gap-1 cursor-pointer" onClick={toggleExpanded}>
 								{tasks.length < 10 && (
@@ -2003,9 +2004,9 @@ const ChatViewComponent: React.ForwardRefRenderFunction<ChatViewRef, ChatViewPro
 								/>
 							</div>
 						</div>
-					)}
+					)} */}
 					<div>
-						<OrganizationSelector className="absolute top-2 right-3" />
+						{/* <OrganizationSelector className="absolute top-2 right-3" /> */}
 					</div>
 					{/* kilocode_change start: changed the classes to support notifications */}
 					<div className="w-full h-full flex flex-col gap-4 px-3.5 transition-all duration-300">
@@ -2019,16 +2020,16 @@ const ChatViewComponent: React.ForwardRefRenderFunction<ChatViewRef, ChatViewPro
 
 						<RooHero /> */}
 
-						{telemetrySetting === "unset" && <TelemetryBanner />}
+						{telemetrySetting === "unset" && false && <TelemetryBanner />}
 						{/* kilocode_change start: KilocodeNotifications + Layout fixes */}
-						{telemetrySetting !== "unset" && (
+						{telemetrySetting !== "unset" && false && (
 							<div className={tasks.length === 0 ? "mt-10" : undefined}>
 								<KilocodeNotifications />
 							</div>
 						)}
 						<div className="flex flex-grow flex-col justify-center gap-4">
 							{/* kilocode_change end */}
-							<p className="text-vscode-editor-foreground leading-tight font-vscode-font-family text-center text-balance max-w-[380px] mx-auto my-0">
+							{/* <p className="text-vscode-editor-foreground leading-tight font-vscode-font-family text-center text-balance max-w-[380px] mx-auto my-0">
 								<Trans
 									i18nKey="chat:about"
 									components={{
@@ -2042,13 +2043,13 @@ const ChatViewComponent: React.ForwardRefRenderFunction<ChatViewRef, ChatViewPro
 										),
 									}}
 								/>
-							</p>
-							{taskHistory.length === 0 && <IdeaSuggestionsBox />} {/* kilocode_change */}
+							</p> */}
+							{/* {taskHistory.length === 0 && <IdeaSuggestionsBox />} kilocode_change */}
 							{/*<div className="mb-2.5">
 								{cloudIsAuthenticated || taskHistory.length < 4 ? <RooTips /> : <RooCloudCTA />}
 							</div> kilocode_change: do not show */}
 							{/* Show the task history preview if expanded and tasks exist */}
-							{taskHistory.length > 0 && isExpanded && <HistoryPreview />}
+							{/* {taskHistory.length > 0 && isExpanded && <HistoryPreview />} */}
 							{/* kilocode_change start: KilocodeNotifications + Layout fixes */}
 						</div>
 						{/* kilocode_change end */}

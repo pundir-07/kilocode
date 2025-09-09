@@ -100,7 +100,7 @@
 		"placeholder": "Edit your message..."
 	},
 	"scrollToBottom": "Scroll to bottom of chat",
-	"about": "Generate, refactor, and debug code with AI assistance. Check out our <DocsLink>documentation</DocsLink> to learn more.",
+	"about": "Generate, refactor, and debug code with AI assistance. ",
 	"onboarding": "Your task list in this workspace is empty.",
 	"rooTips": {
 		"boomerangTasks": {
@@ -137,8 +137,8 @@
 	"sendMessage": "Send message",
 	"stopTts": "Stop text-to-speech",
 	"typeMessage": "Type a message...",
-	"typeTask": "Type your task here...",
-	"addContext": "@ to add context, / for commands",
+	"typeTask": "Type @ to add context...",
+	"addContext": "",
 	"dragFiles": "hold shift to drag in files",
 	"dragFilesImages": "hold shift to drag in files/images",
 	"errorReadingFile": "Error reading file:",
