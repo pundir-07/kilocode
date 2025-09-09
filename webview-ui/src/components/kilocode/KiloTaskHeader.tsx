@@ -97,36 +97,38 @@ const KiloTaskHeader = ({
 				<div className="flex justify-between items-center gap-2">
 					<div
 						className="flex items-center cursor-pointer -ml-0.5 select-none grow min-w-0"
-						onClick={() => setIsTaskExpanded(!isTaskExpanded)}>
+						onClick={() =>{}
+						//  setIsTaskExpanded(!isTaskExpanded)
+						 }>
 						<div className="flex items-center shrink-0">
 							<span className={`codicon codicon-chevron-${isTaskExpanded ? "down" : "right"}`}></span>
 						</div>
 						<div className="ml-1.5 whitespace-nowrap overflow-hidden text-ellipsis grow min-w-0">
 							<span className="font-bold">
-								{t("chat:task.title")}
-								{!isTaskExpanded && ":"}
+								{/* {t("chat:task.title")} */}
+								{/* {!isTaskExpanded && ":"} */}
 							</span>
 							{!isTaskExpanded && (
 								<span style={{ marginLeft: 4 }}>{highlightText(task.text, false, customModes)}</span>
 							)}
 						</div>
 					</div>
-					<StandardTooltip content={t("chat:task.closeAndStart")}>
+					{/* <StandardTooltip content={t("chat:task.closeAndStart")}>
 						<Button variant="ghost" size="icon" onClick={onClose} className="shrink-0 w-5 h-5">
 							<span className="codicon codicon-close" />
 						</Button>
-					</StandardTooltip>
+					</StandardTooltip> */}
 				</div>
 				{/* Collapsed state: Track context and cost if we have any */}
 				{!isTaskExpanded && contextWindow > 0 && (
 					<div className={`w-full flex flex-col gap-1 h-auto`}>
-						{showTaskTimeline && (
+						{/* {showTaskTimeline && (
 							<TaskTimeline
 								groupedMessages={groupedMessages}
 								onMessageClick={onMessageClick}
 								isTaskActive={isTaskActive}
 							/>
-						)}
+						)} */}
 
 						<div className="flex flex-row items-center gap-1">
 							<ContextWindowProgress
@@ -138,9 +140,9 @@ const KiloTaskHeader = ({
 										: undefined
 								}
 							/>
-							{condenseButton}
-							<ShareButton item={currentTaskItem} disabled={buttonsDisabled} />
-							{!!totalCost && <span>${totalCost.toFixed(2)}</span>}
+							{/* {condenseButton} */}
+							{/* <ShareButton item={currentTaskItem} disabled={buttonsDisabled} />
+							{!!totalCost && <span>${totalCost.toFixed(2)}</span>} */}
 						</div>
 					</div>
 				)}
@@ -247,7 +249,7 @@ const KiloTaskHeader = ({
 					</>
 				)}
 			</div>
-			<TodoListDisplay todos={todos ?? (task as any)?.tool?.todos ?? []} />
+			{/* <TodoListDisplay todos={todos ?? (task as any)?.tool?.todos ?? []} /> */}
 		</div>
 	)
 }
